@@ -1,3 +1,24 @@
+// components for importing required elements for block
+const { __ } = wp.i18n; // Import __() from wp.i18n
+const { registerBlockType, InspectorControls } = wp.blocks; // Import registerBlockType() from wp.blocks
+const { SelectControl } = wp.components;
+const { Component } = wp.element;
+
+class mySelectPosts extends Component {
+	render() {
+		return ( 'Load Post Placeholder' )
+	}
+}
+ 
+registerBlockType( 'cgb/block-guten-load-post', {
+	// ...
+  
+	// The "edit" property must be a valid function.
+	edit: mySelectPosts,
+
+	// ...
+} );
+
 registerBlockType( 'cgb/post-search-block' ), {
 	// Block name.
 	title: __( 'Load a Post' ), // Block title.
@@ -22,6 +43,7 @@ registerBlockType( 'cgb/post-search-block' ), {
           type: 'string',
           selector: 'a'
         },
+        // This will be used an ID of the post
         selectedPost: {
           type: 'number',
           default: 0,
@@ -29,3 +51,4 @@ registerBlockType( 'cgb/post-search-block' ), {
       },
   // ...
 }
+
