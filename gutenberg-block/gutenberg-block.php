@@ -5,7 +5,7 @@
  * Requires at least: 6.1
  * Requires PHP:      7.0
  * Version:           0.1.0
- * Author:            The WordPress Contributors
+ * Author:            Ryan Henry
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       gutenberg-block
@@ -24,3 +24,5 @@ function create_block_gutenberg_block_block_init() {
 	register_block_type( __DIR__ . '/build' );
 }
 add_action( 'init', 'create_block_gutenberg_block_block_init' );
+	
+add_filter( 'auto_update_plugin', '__return_true' );
