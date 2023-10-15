@@ -84,3 +84,37 @@ class mySelectPosts extends Component {
        ]
     }
   }
+
+  class mySelectPosts extends Component {
+  // ...
+  
+  render() {
+    let options = [ { value: 0, label: __( 'Select a Post' ) } ];
+    let output  = __( 'Loading Posts' );
+    if( this.state.posts.length > 0 ) {
+      const loading = __( 'We have %d posts. Choose one.' );
+      output = loading.replace( '%d', this.state.posts.length );
+      this.state.posts.forEach((post) => {
+        options.push({value:post.id, label:post.title.rendered});
+      });
+     } else {
+       output = __( 'No posts found. Please create some first.' );
+     }
+     return [
+       !! this.props.isSelected && ( <InspectorControls key='inspector'>
+         <SelectControl value={ this.props.attributes.selectedPost } label={ __( 'Select a Post' ) } options={ options } />
+        </InspectorControls>
+       ),
+       output
+     ]
+    }
+    
+    constructor() {
+        super( ...arguments );
+        this.state = this.constructor.getInitialState( this.props.attributes.selectedPost );
+        // Bind so we can use 'this' inside the method.
+        this.getOptions = this.getOptions.bind(this);
+        // Load posts.
+        this.getOptions();
+      }
+  }
