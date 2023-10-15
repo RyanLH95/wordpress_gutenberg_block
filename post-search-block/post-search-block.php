@@ -24,6 +24,7 @@ function create_block_post_search_block_block_init() {
 	register_block_type( __DIR__ . '/build' );
 }
 
+// this function is for paginating through the results when search
 global $wp_query;
 $total = $wp_query->max_num_pages;
 // only bother with the rest if we have more than 1 page!
