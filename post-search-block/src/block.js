@@ -52,3 +52,35 @@ registerBlockType( 'cgb/post-search-block' ), {
   // ...
 }
 
+// function for dropdown for selecting recent posts
+class mySelectPosts extends Component {
+    static getInitialState( selectedPost ) {
+      return {
+        posts: [],
+        selectedPost: selectedPost,
+        post: {}, 
+      };
+    }
+    // This will construct our component
+    // 'this.props.attributes' will help us access the reuired attributes
+    constructor() {
+      super( ...arguments );
+      // Maybe we have a previously selected post. Try to load it.
+      this.state = this.constructor.getInitialState( this.props.attributes.selectedPost );
+    }
+  
+    render() {
+      let options = [ { value: 0, label: __( 'Select a Post' ) } ];
+      return [
+        !! this.props.isSelected && ( <InspectorControls key='inspector'>
+          <SelectControl 
+          // Selected value.
+          value={ this.props.attributes.selectedPost } 
+          label={ __( 'Select a Post' ) } 
+          options={ options } />
+        </InspectorControls>
+        ), 
+       'Load Post Placeholder'
+       ]
+    }
+  }
