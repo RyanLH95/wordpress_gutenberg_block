@@ -73,80 +73,47 @@ class mySelectPosts extends Component {
     // This will construct our component
     // 'this.props.attributes' will help us access the reuired attributes
     constructor() {
-      super( ...arguments );
-      // Maybe we have a previously selected post. Try to load it.
       this.state = this.constructor.getInitialState( this.props.attributes.selectedPost );
     }
   
     render() {
       let options = [ { value: 0, label: __( 'Select a Post' ) } ];
+      let output  = __( 'Loading Posts' );
+      this.props.className += ' loading';
+      if( this.state.posts.length > 0 ) {
+        // ...
+      } else {
+        output = __( 'No posts found. Please create some first.' );
+      }
+      // Checking if we have anything in the object
+      if( this.state.post.hasOwnProperty('title') ) {
+        output = <div className="post">
+          <a href={ this.state.post.link }><h2 dangerouslySetInnerHTML={ { __html: this.state.post.title.rendered } }></h2></a>
+          <p dangerouslySetInnerHTML={ { __html: this.state.post.excerpt.rendered } }></p>
+          </div>;
+        this.props.className += ' has-post';
+      } else {
+        this.props.className += ' no-post';
+      }
       return [
         !! this.props.isSelected && ( <InspectorControls key='inspector'>
-          <SelectControl 
-          // Selected value.
-          value={ this.props.attributes.selectedPost } 
-          label={ __( 'Select a Post' ) } 
-          options={ options } />
+          <SelectControl onChange={this.onChangeSelectPost} value={ this.props.attributes.selectedPost } label={ __( 'Select a Post' ) } options={ options } />
         </InspectorControls>
         ), 
-       'Load Post Placeholder'
-       ]
-    }
-  }
-
-  class mySelectPosts extends Component {
-  // ...
-  
-  render() {
-    let options = [ { value: 0, label: __( 'Select a Post' ) } ];
-    let output  = __( 'Loading Posts' );
-    this.props.className += ' loading';
-    if( this.state.posts.length > 0 ) {
-      // ...
-    } else {
-      output = __( 'No posts found. Please create some first.' );
-    }
-    // Checking if we have anything in the object
-    if( this.state.post.hasOwnProperty('title') ) {
-      output = <div className="post">
-        <a href={ this.state.post.link }><h2 dangerouslySetInnerHTML={ { __html: this.state.post.title.rendered } }></h2></a>
-        <p dangerouslySetInnerHTML={ { __html: this.state.post.excerpt.rendered } }></p>
-        </div>;
-      this.props.className += ' has-post';
-    } else {
-      this.props.className += ' no-post';
-    }
-    return [
-      !! this.props.isSelected && ( <InspectorControls key='inspector'>
-        <SelectControl onChange={this.onChangeSelectPost} value={ this.props.attributes.selectedPost } label={ __( 'Select a Post' ) } options={ options } />
-      </InspectorControls>
-      ), 
-      <div className={this.props.className}>{output}</div>
-      ]
-    }
-  
-
-    // This will call the loading posts method
-    constructor() {
-        super( ...arguments );
-        this.state = this.constructor.getInitialState( this.props.attributes.selectedPost );
-        // Bind so we can use 'this' inside the method.
-        this.getOptions = this.getOptions.bind(this);
-        // Load posts.
-        this.getOptions();
-        this.onChangeSelectPost = this.onChangeSelectPost.bind(this);
+        <div className={this.props.className}>{output}</div>
+        ]
       }
 
-      getOptions() {
-        return ( new wp.api.collections.Posts() ).fetch().then( ( posts ) => {
-          if( posts && 0 !== this.state.selectedPost ) {
-            // If we have a selected Post, find that post and add it.
-            const post = posts.find( ( item ) => { return item.id == this.state.selectedPost } );
-            // This is the same as { post: post, posts: posts }
-            this.setState( { post, posts } );
-          } else {
-            this.setState({ posts });
-          }
-        });
-      } 
-  }
+        getOptions() {
+          return ( new wp.api.collections.Posts() ).fetch().then( ( posts ) => {
+            if( posts && 0 !== this.state.selectedPost ) {
+              // If we have a selected Post, find that post and add it.
+              const post = posts.find( ( item ) => { return item.id == this.state.selectedPost } );
+              // This is the same as { post: post, posts: posts }
+              this.setState( { post, posts } );
+            } else {
+              this.setState({ posts });
+            }
+          });
+        } 
+    }
